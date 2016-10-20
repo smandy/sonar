@@ -5,6 +5,7 @@
 #include <memory>
 #include <vector>
 #include "ruleLoader.h"
+#include <signal.h>
 
 class SonarServerImpl : public sonar::SonarServer {
     Ice::CommunicatorPtr communicator;
@@ -80,29 +81,51 @@ public:
         std::cout << "RemoveListener" << std::endl;
     };
 
+    auto loadConfig(std::string fn) {
+        std::cout << "LoadConfig" << std::endl;
+        auto newRules = RuleLoader::parseRules(fn);
+        std::swap( rules, newRules);
+        std::cout << " Got " << rules.size() << std::endl;
+    };
+
     virtual void loadConfig_async(const ::sonar::AMD_SonarServer_loadConfigPtr& cb,
                                   const ::std::string& fn,
                                   const ::Ice::Current& = ::Ice::Current()) {
-        std::cout << "LoadConfig" << std::endl;
-        auto rules = RuleLoader::parseRules(fn);
+        loadConfig(fn);
         cb->ice_response(rules.size());
     };
 };
 
+static std::weak_ptr<SonarServerImpl> instance;
+void reloadConfig(int x) {
+    if ( auto sptr = instance.lock() ) {
+        std::cout << "Loading config " << x << " " << sptr.use_count() <<  std::endl;
+        sptr->loadConfig("/home/andy/repos/sonar/config/rules.txt");
+    };
+};
+
 int main(int argc, char *argv[]) {
-  std::cout << "Make communicator" << std::endl;
-  auto communicator = Ice::initialize(argc, argv);
-  std::cout << "Make server" << std::endl;
-  auto server = std::make_unique<SonarServerImpl>(communicator);
-  std::cout << "Make adapter" << std::endl;
-  auto adapter = communicator->createObjectAdapter("SonarServer");
-  std::cout << "Add impl to adapter" << std::endl;
-  // Liveness of server ensured by scope of main
-  auto prx =
-      adapter->add(server.get(), communicator->stringToIdentity("server"));
-  std::cout << "Activate adpater" << std::endl;
-  adapter->activate();
-  std::cout << "Wait for shutdown" << std::endl;
-  communicator->waitForShutdown();
-  std::cout << "Shutdown - exiting" << std::endl;
+    signal(SIGHUP, reloadConfig);
+    std::cout << "Make communicator" << std::endl;
+    auto communicator = Ice::initialize(argc, argv);
+    std::cout << "Make server" << std::endl;
+    
+    auto server = std::make_shared<SonarServerImpl>(communicator);
+    instance = server;
+    
+    std::cout << "Make adapter" << std::endl;
+    auto adapter = communicator->createObjectAdapter("SonarServer");
+    std::cout << "Add impl to adapter" << std::endl;
+    // Liveness of server ensured by scope of main
+    auto prx =
+        adapter->add(server.get(), communicator->stringToIdentity("server"));
+    std::cout << "Activate adpater" << std::endl;
+    adapter->activate();
+    std::cout << "Wait for shutdown" << std::endl;
+    communicator->waitForShutdown();
+    std::cout << "Shutdown - exiting" << std::endl;
+
+    adapter->deactivate();
+
+    communicator->destroy();
 };

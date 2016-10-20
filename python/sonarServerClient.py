@@ -19,3 +19,4 @@ server.onStatus( [ sonar.ServerStatus( [0], [0], x, [ sonar.Status.ERROR] ) for 
 print [ (x.id,x.status[0]) for x in server.getStatuses()] 
 #server.reset()
 
+server.loadConfig('/home/andy/repos/sonar/config/rules.txt')
