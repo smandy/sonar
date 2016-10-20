@@ -59,6 +59,8 @@ const ::std::string __sonar__SonarServer__removeListenerByIdent_name = "removeLi
 
 const ::std::string __sonar__SonarServer__getStatuses_name = "getStatuses";
 
+const ::std::string __sonar__SonarServer__loadConfig_name = "loadConfig";
+
 }
 
 namespace Ice
@@ -177,6 +179,31 @@ IceAsync::sonar::AMD_SonarServer_getStatuses::AMD_SonarServer_getStatuses(::IceI
 
 void
 IceAsync::sonar::AMD_SonarServer_getStatuses::ice_response(const ::sonar::ServerStatusSeq& __ret)
+{
+    if(__validateResponse(true))
+    {
+        try
+        {
+            ::IceInternal::BasicStream* __os = __startWriteParams(::Ice::DefaultFormat);
+            __os->write(__ret);
+            __endWriteParams(true);
+        }
+        catch(const ::Ice::Exception& __ex)
+        {
+            __exception(__ex);
+            return;
+        }
+        __response();
+    }
+}
+
+IceAsync::sonar::AMD_SonarServer_loadConfig::AMD_SonarServer_loadConfig(::IceInternal::Incoming& in) :
+    ::IceInternal::IncomingAsync(in)
+{
+}
+
+void
+IceAsync::sonar::AMD_SonarServer_loadConfig::ice_response(::Ice::Int __ret)
 {
     if(__validateResponse(true))
     {
@@ -647,6 +674,125 @@ IceProxy::sonar::SonarServer::end_getStatuses(const ::Ice::AsyncResultPtr& __res
     return __ret;
 }
 
+::Ice::Int
+IceProxy::sonar::SonarServer::loadConfig(const ::std::string& __p_fn, const ::Ice::Context* __ctx)
+{
+    __checkTwowayOnly(__sonar__SonarServer__loadConfig_name);
+    ::IceInternal::Outgoing __og(this, __sonar__SonarServer__loadConfig_name, ::Ice::Normal, __ctx);
+    try
+    {
+        ::IceInternal::BasicStream* __os = __og.startWriteParams(::Ice::DefaultFormat);
+        __os->write(__p_fn);
+        __og.endWriteParams();
+    }
+    catch(const ::Ice::LocalException& __ex)
+    {
+        __og.abort(__ex);
+    }
+    if(!__og.invoke())
+    {
+        try
+        {
+            __og.throwUserException();
+        }
+        catch(const ::Ice::UserException& __ex)
+        {
+            ::Ice::UnknownUserException __uue(__FILE__, __LINE__, __ex.ice_name());
+            throw __uue;
+        }
+    }
+    ::Ice::Int __ret;
+    ::IceInternal::BasicStream* __is = __og.startReadParams();
+    __is->read(__ret);
+    __og.endReadParams();
+    return __ret;
+}
+
+::Ice::AsyncResultPtr
+IceProxy::sonar::SonarServer::begin_loadConfig(const ::std::string& __p_fn, const ::Ice::Context* __ctx, const ::IceInternal::CallbackBasePtr& __del, const ::Ice::LocalObjectPtr& __cookie)
+{
+    __checkAsyncTwowayOnly(__sonar__SonarServer__loadConfig_name);
+    ::IceInternal::OutgoingAsyncPtr __result = new ::IceInternal::OutgoingAsync(this, __sonar__SonarServer__loadConfig_name, __del, __cookie);
+    try
+    {
+        __result->prepare(__sonar__SonarServer__loadConfig_name, ::Ice::Normal, __ctx);
+        ::IceInternal::BasicStream* __os = __result->startWriteParams(::Ice::DefaultFormat);
+        __os->write(__p_fn);
+        __result->endWriteParams();
+        __result->invoke();
+    }
+    catch(const ::Ice::Exception& __ex)
+    {
+        __result->abort(__ex);
+    }
+    return __result;
+}
+
+#ifdef ICE_CPP11
+
+::Ice::AsyncResultPtr
+IceProxy::sonar::SonarServer::__begin_loadConfig(const ::std::string& __p_fn, const ::Ice::Context* __ctx, const ::IceInternal::Function<void (::Ice::Int)>& __response, const ::IceInternal::Function<void (const ::Ice::Exception&)>& __exception, const ::IceInternal::Function<void (bool)>& __sent)
+{
+    class Cpp11CB : public ::IceInternal::Cpp11FnCallbackNC
+    {
+    public:
+
+        Cpp11CB(const ::std::function<void (::Ice::Int)>& responseFunc, const ::std::function<void (const ::Ice::Exception&)>& exceptionFunc, const ::std::function<void (bool)>& sentFunc) :
+            ::IceInternal::Cpp11FnCallbackNC(exceptionFunc, sentFunc),
+            _response(responseFunc)
+        {
+            CallbackBase::checkCallback(true, responseFunc || exceptionFunc != nullptr);
+        }
+
+        virtual void completed(const ::Ice::AsyncResultPtr& __result) const
+        {
+            ::sonar::SonarServerPrx __proxy = ::sonar::SonarServerPrx::uncheckedCast(__result->getProxy());
+            ::Ice::Int __ret;
+            try
+            {
+                __ret = __proxy->end_loadConfig(__result);
+            }
+            catch(const ::Ice::Exception& ex)
+            {
+                Cpp11FnCallbackNC::exception(__result, ex);
+                return;
+            }
+            if(_response != nullptr)
+            {
+                _response(__ret);
+            }
+        }
+    
+    private:
+        
+        ::std::function<void (::Ice::Int)> _response;
+    };
+    return begin_loadConfig(__p_fn, __ctx, new Cpp11CB(__response, __exception, __sent));
+}
+#endif
+
+::Ice::Int
+IceProxy::sonar::SonarServer::end_loadConfig(const ::Ice::AsyncResultPtr& __result)
+{
+    ::Ice::AsyncResult::__check(__result, this, __sonar__SonarServer__loadConfig_name);
+    ::Ice::Int __ret;
+    if(!__result->__wait())
+    {
+        try
+        {
+            __result->__throwUserException();
+        }
+        catch(const ::Ice::UserException& __ex)
+        {
+            throw ::Ice::UnknownUserException(__FILE__, __LINE__, __ex.ice_name());
+        }
+    }
+    ::IceInternal::BasicStream* __is = __result->__startReadParams();
+    __is->read(__ret);
+    __result->__endReadParams();
+    return __ret;
+}
+
 const ::std::string&
 IceProxy::sonar::SonarServer::ice_staticId()
 {
@@ -1011,6 +1157,30 @@ sonar::SonarServer::___getStatuses(::IceInternal::Incoming& __inS, const ::Ice::
     return ::Ice::DispatchAsync;
 }
 
+::Ice::DispatchStatus
+sonar::SonarServer::___loadConfig(::IceInternal::Incoming& __inS, const ::Ice::Current& __current)
+{
+    __checkMode(::Ice::Normal, __current.mode);
+    ::IceInternal::BasicStream* __is = __inS.startReadParams();
+    ::std::string __p_fn;
+    __is->read(__p_fn);
+    __inS.endReadParams();
+    ::sonar::AMD_SonarServer_loadConfigPtr __cb = new IceAsync::sonar::AMD_SonarServer_loadConfig(__inS);
+    try
+    {
+        loadConfig_async(__cb, __p_fn, __current);
+    }
+    catch(const ::std::exception& __ex)
+    {
+        __cb->ice_exception(__ex);
+    }
+    catch(...)
+    {
+        __cb->ice_exception();
+    }
+    return ::Ice::DispatchAsync;
+}
+
 namespace
 {
 const ::std::string __sonar__SonarServer_all[] =
@@ -1022,6 +1192,7 @@ const ::std::string __sonar__SonarServer_all[] =
     "ice_ids",
     "ice_isA",
     "ice_ping",
+    "loadConfig",
     "onStatus",
     "removeListener",
     "removeListenerByIdent"
@@ -1032,7 +1203,7 @@ const ::std::string __sonar__SonarServer_all[] =
 ::Ice::DispatchStatus
 sonar::SonarServer::__dispatch(::IceInternal::Incoming& in, const ::Ice::Current& current)
 {
-    ::std::pair< const ::std::string*, const ::std::string*> r = ::std::equal_range(__sonar__SonarServer_all, __sonar__SonarServer_all + 10, current.operation);
+    ::std::pair< const ::std::string*, const ::std::string*> r = ::std::equal_range(__sonar__SonarServer_all, __sonar__SonarServer_all + 11, current.operation);
     if(r.first == r.second)
     {
         throw ::Ice::OperationNotExistException(__FILE__, __LINE__, current.id, current.facet, current.operation);
@@ -1070,13 +1241,17 @@ sonar::SonarServer::__dispatch(::IceInternal::Incoming& in, const ::Ice::Current
         }
         case 7:
         {
-            return ___onStatus(in, current);
+            return ___loadConfig(in, current);
         }
         case 8:
         {
-            return ___removeListener(in, current);
+            return ___onStatus(in, current);
         }
         case 9:
+        {
+            return ___removeListener(in, current);
+        }
+        case 10:
         {
             return ___removeListenerByIdent(in, current);
         }

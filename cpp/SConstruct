@@ -2,15 +2,16 @@ import builders
 
 env = Environment(CPPFLAGS = ['--std=c++14', '-I.', '-g'],
                   SLICE_INCLUDES= ['/usr/share/Ice-3.6.1/slice'],
-                  LIBPATH = ['/usr/lib/x86_64-linux-gnu/c++11'])
+                  LIBPATH = ['/usr/lib/x86_64-linux-gnu/c++11',
+                             '/usr/lib/x86_64-linux-gnu'])
 
 builders.addSlice2cppBuilder(env)
 
 env.Slice2cpp(target = ['sonar.cpp', 'sonar.hpp'], source = '../slice/sonar.ice')
 sonar = env.Object(source = 'sonar.cpp')
 
-env.Program('sonarServer.cpp', LIBS = [sonar, 'Ice', 'IceUtil','IceStorm','pthread'])
+env.Program('sonarServer.cpp', LIBS = [sonar, 'Ice', 'IceUtil','IceStorm','pthread', 'boost_filesystem', 'boost_system'])
 
-env.Program('chronoStuff.cpp' )
+env.Program('chronoStuff.cpp', LIBS = ['boost_date_time', 'boost_filesystem', 'boost_system'] )
 
-env.Program('ruleLoaderMain.cpp' )
+env.Program('ruleLoaderMain.cpp' , LIBS = ['boost_filesystem', 'boost_system'])

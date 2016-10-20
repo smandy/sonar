@@ -4,11 +4,13 @@
 #include "IceStorm/IceStorm.h"
 #include <memory>
 #include <vector>
+#include "ruleLoader.h"
 
 class SonarServerImpl : public sonar::SonarServer {
     Ice::CommunicatorPtr communicator;
-    IceStorm::TopicPrx topic;
+    IceStorm::TopicPrx   topic;
     std::set<sonar::SonarServerListenerPrx> listeners;
+    std::vector<RulePtr> rules;
     
 public:
     SonarServerImpl( Ice::CommunicatorPtr _communicator) : communicator( _communicator) {
@@ -37,8 +39,8 @@ public:
                         const ::sonar::ServerStatusSeq& stats,
                         const ::Ice::Current& = ::Ice::Current()) { 
         static thread_local sonar::ServerStatus finder;
-        std::cout << "On status" << std::endl;
         for ( const auto& stat : stats ) {
+            std::cout << "On status " << stat.id << std::endl;
             const auto x = std::lower_bound( begin(statuses),
                                        end(statuses),
                                        stat,
@@ -76,6 +78,14 @@ public:
                          const ::sonar::SonarServerListenerPtr &,
                          const ::Ice::Current & = ::Ice::Current()) {
         std::cout << "RemoveListener" << std::endl;
+    };
+
+    virtual void loadConfig_async(const ::sonar::AMD_SonarServer_loadConfigPtr& cb,
+                                  const ::std::string& fn,
+                                  const ::Ice::Current& = ::Ice::Current()) {
+        std::cout << "LoadConfig" << std::endl;
+        auto rules = RuleLoader::parseRules(fn);
+        cb->ice_response(rules.size());
     };
 };
 

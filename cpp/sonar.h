@@ -297,6 +297,15 @@ public:
 
 typedef ::IceUtil::Handle< ::sonar::AMD_SonarServer_getStatuses> AMD_SonarServer_getStatusesPtr;
 
+class AMD_SonarServer_loadConfig : virtual public ::Ice::AMDCallback
+{
+public:
+
+    virtual void ice_response(::Ice::Int) = 0;
+};
+
+typedef ::IceUtil::Handle< ::sonar::AMD_SonarServer_loadConfig> AMD_SonarServer_loadConfigPtr;
+
 }
 
 namespace IceAsync
@@ -377,6 +386,15 @@ public:
     virtual void ice_response(const ::sonar::ServerStatusSeq&);
 };
 
+class AMD_SonarServer_loadConfig : public ::sonar::AMD_SonarServer_loadConfig, public ::IceInternal::IncomingAsync
+{
+public:
+
+    AMD_SonarServer_loadConfig(::IceInternal::Incoming&);
+
+    virtual void ice_response(::Ice::Int);
+};
+
 }
 
 }
@@ -407,6 +425,9 @@ typedef ::IceUtil::Handle< Callback_SonarServer_removeListenerByIdent_Base> Call
 
 class Callback_SonarServer_getStatuses_Base : virtual public ::IceInternal::CallbackBase { };
 typedef ::IceUtil::Handle< Callback_SonarServer_getStatuses_Base> Callback_SonarServer_getStatusesPtr;
+
+class Callback_SonarServer_loadConfig_Base : virtual public ::IceInternal::CallbackBase { };
+typedef ::IceUtil::Handle< Callback_SonarServer_loadConfig_Base> Callback_SonarServer_loadConfigPtr;
 
 }
 
@@ -1100,6 +1121,82 @@ private:
     ::Ice::AsyncResultPtr begin_getStatuses(const ::Ice::Context*, const ::IceInternal::CallbackBasePtr&, const ::Ice::LocalObjectPtr& __cookie = 0);
     
 public:
+
+    ::Ice::Int loadConfig(const ::std::string& __p_fn)
+    {
+        return loadConfig(__p_fn, 0);
+    }
+    ::Ice::Int loadConfig(const ::std::string& __p_fn, const ::Ice::Context& __ctx)
+    {
+        return loadConfig(__p_fn, &__ctx);
+    }
+#ifdef ICE_CPP11
+    ::Ice::AsyncResultPtr
+    begin_loadConfig(const ::std::string& __p_fn, const ::IceInternal::Function<void (::Ice::Int)>& __response, const ::IceInternal::Function<void (const ::Ice::Exception&)>& __exception = ::IceInternal::Function<void (const ::Ice::Exception&)>(), const ::IceInternal::Function<void (bool)>& __sent = ::IceInternal::Function<void (bool)>())
+    {
+        return __begin_loadConfig(__p_fn, 0, __response, __exception, __sent);
+    }
+    ::Ice::AsyncResultPtr
+    begin_loadConfig(const ::std::string& __p_fn, const ::IceInternal::Function<void (const ::Ice::AsyncResultPtr&)>& __completed, const ::IceInternal::Function<void (const ::Ice::AsyncResultPtr&)>& __sent = ::IceInternal::Function<void (const ::Ice::AsyncResultPtr&)>())
+    {
+        return begin_loadConfig(__p_fn, 0, ::Ice::newCallback(__completed, __sent), 0);
+    }
+    ::Ice::AsyncResultPtr
+    begin_loadConfig(const ::std::string& __p_fn, const ::Ice::Context& __ctx, const ::IceInternal::Function<void (::Ice::Int)>& __response, const ::IceInternal::Function<void (const ::Ice::Exception&)>& __exception = ::IceInternal::Function<void (const ::Ice::Exception&)>(), const ::IceInternal::Function<void (bool)>& __sent = ::IceInternal::Function<void (bool)>())
+    {
+        return __begin_loadConfig(__p_fn, &__ctx, __response, __exception, __sent);
+    }
+    ::Ice::AsyncResultPtr
+    begin_loadConfig(const ::std::string& __p_fn, const ::Ice::Context& __ctx, const ::IceInternal::Function<void (const ::Ice::AsyncResultPtr&)>& __completed, const ::IceInternal::Function<void (const ::Ice::AsyncResultPtr&)>& __sent = ::IceInternal::Function<void (const ::Ice::AsyncResultPtr&)>())
+    {
+        return begin_loadConfig(__p_fn, &__ctx, ::Ice::newCallback(__completed, __sent));
+    }
+    
+private:
+
+    ::Ice::AsyncResultPtr __begin_loadConfig(const ::std::string& __p_fn, const ::Ice::Context* __ctx, const ::IceInternal::Function<void (::Ice::Int)>& __response, const ::IceInternal::Function<void (const ::Ice::Exception&)>& __exception, const ::IceInternal::Function<void (bool)>& __sent);
+    
+public:
+#endif
+
+    ::Ice::AsyncResultPtr begin_loadConfig(const ::std::string& __p_fn)
+    {
+        return begin_loadConfig(__p_fn, 0, ::IceInternal::__dummyCallback, 0);
+    }
+
+    ::Ice::AsyncResultPtr begin_loadConfig(const ::std::string& __p_fn, const ::Ice::Context& __ctx)
+    {
+        return begin_loadConfig(__p_fn, &__ctx, ::IceInternal::__dummyCallback, 0);
+    }
+
+    ::Ice::AsyncResultPtr begin_loadConfig(const ::std::string& __p_fn, const ::Ice::CallbackPtr& __del, const ::Ice::LocalObjectPtr& __cookie = 0)
+    {
+        return begin_loadConfig(__p_fn, 0, __del, __cookie);
+    }
+
+    ::Ice::AsyncResultPtr begin_loadConfig(const ::std::string& __p_fn, const ::Ice::Context& __ctx, const ::Ice::CallbackPtr& __del, const ::Ice::LocalObjectPtr& __cookie = 0)
+    {
+        return begin_loadConfig(__p_fn, &__ctx, __del, __cookie);
+    }
+
+    ::Ice::AsyncResultPtr begin_loadConfig(const ::std::string& __p_fn, const ::sonar::Callback_SonarServer_loadConfigPtr& __del, const ::Ice::LocalObjectPtr& __cookie = 0)
+    {
+        return begin_loadConfig(__p_fn, 0, __del, __cookie);
+    }
+
+    ::Ice::AsyncResultPtr begin_loadConfig(const ::std::string& __p_fn, const ::Ice::Context& __ctx, const ::sonar::Callback_SonarServer_loadConfigPtr& __del, const ::Ice::LocalObjectPtr& __cookie = 0)
+    {
+        return begin_loadConfig(__p_fn, &__ctx, __del, __cookie);
+    }
+
+    ::Ice::Int end_loadConfig(const ::Ice::AsyncResultPtr&);
+    
+private:
+
+    ::Ice::Int loadConfig(const ::std::string&, const ::Ice::Context*);
+    ::Ice::AsyncResultPtr begin_loadConfig(const ::std::string&, const ::Ice::Context*, const ::IceInternal::CallbackBasePtr&, const ::Ice::LocalObjectPtr& __cookie = 0);
+    
+public:
     
     ::IceInternal::ProxyHandle<SonarServer> ice_context(const ::Ice::Context& __context) const
     {
@@ -1285,6 +1382,9 @@ public:
 
     virtual void getStatuses_async(const ::sonar::AMD_SonarServer_getStatusesPtr&, const ::Ice::Current& = ::Ice::Current()) = 0;
     ::Ice::DispatchStatus ___getStatuses(::IceInternal::Incoming&, const ::Ice::Current&);
+
+    virtual void loadConfig_async(const ::sonar::AMD_SonarServer_loadConfigPtr&, const ::std::string&, const ::Ice::Current& = ::Ice::Current()) = 0;
+    ::Ice::DispatchStatus ___loadConfig(::IceInternal::Incoming&, const ::Ice::Current&);
 
     virtual ::Ice::DispatchStatus __dispatch(::IceInternal::Incoming&, const ::Ice::Current&);
 
@@ -1986,6 +2086,110 @@ template<class T, typename CT> Callback_SonarServer_getStatusesPtr
 newCallback_SonarServer_getStatuses(T* instance, void (T::*cb)(const ::sonar::ServerStatusSeq&, const CT&), void (T::*excb)(const ::Ice::Exception&, const CT&), void (T::*sentcb)(bool, const CT&) = 0)
 {
     return new Callback_SonarServer_getStatuses<T, CT>(instance, cb, excb, sentcb);
+}
+
+template<class T>
+class CallbackNC_SonarServer_loadConfig : public Callback_SonarServer_loadConfig_Base, public ::IceInternal::TwowayCallbackNC<T>
+{
+public:
+
+    typedef IceUtil::Handle<T> TPtr;
+
+    typedef void (T::*Exception)(const ::Ice::Exception&);
+    typedef void (T::*Sent)(bool);
+    typedef void (T::*Response)(::Ice::Int);
+
+    CallbackNC_SonarServer_loadConfig(const TPtr& obj, Response cb, Exception excb, Sent sentcb)
+        : ::IceInternal::TwowayCallbackNC<T>(obj, cb != 0, excb, sentcb), _response(cb)
+    {
+    }
+
+    virtual void completed(const ::Ice::AsyncResultPtr& __result) const
+    {
+        ::sonar::SonarServerPrx __proxy = ::sonar::SonarServerPrx::uncheckedCast(__result->getProxy());
+        ::Ice::Int __ret;
+        try
+        {
+            __ret = __proxy->end_loadConfig(__result);
+        }
+        catch(const ::Ice::Exception& ex)
+        {
+            ::IceInternal::CallbackNC<T>::exception(__result, ex);
+            return;
+        }
+        if(_response)
+        {
+            (::IceInternal::CallbackNC<T>::_callback.get()->*_response)(__ret);
+        }
+    }
+
+    private:
+
+    Response _response;
+};
+
+template<class T> Callback_SonarServer_loadConfigPtr
+newCallback_SonarServer_loadConfig(const IceUtil::Handle<T>& instance, void (T::*cb)(::Ice::Int), void (T::*excb)(const ::Ice::Exception&), void (T::*sentcb)(bool) = 0)
+{
+    return new CallbackNC_SonarServer_loadConfig<T>(instance, cb, excb, sentcb);
+}
+
+template<class T> Callback_SonarServer_loadConfigPtr
+newCallback_SonarServer_loadConfig(T* instance, void (T::*cb)(::Ice::Int), void (T::*excb)(const ::Ice::Exception&), void (T::*sentcb)(bool) = 0)
+{
+    return new CallbackNC_SonarServer_loadConfig<T>(instance, cb, excb, sentcb);
+}
+
+template<class T, typename CT>
+class Callback_SonarServer_loadConfig : public Callback_SonarServer_loadConfig_Base, public ::IceInternal::TwowayCallback<T, CT>
+{
+public:
+
+    typedef IceUtil::Handle<T> TPtr;
+
+    typedef void (T::*Exception)(const ::Ice::Exception& , const CT&);
+    typedef void (T::*Sent)(bool , const CT&);
+    typedef void (T::*Response)(::Ice::Int, const CT&);
+
+    Callback_SonarServer_loadConfig(const TPtr& obj, Response cb, Exception excb, Sent sentcb)
+        : ::IceInternal::TwowayCallback<T, CT>(obj, cb != 0, excb, sentcb), _response(cb)
+    {
+    }
+
+    virtual void completed(const ::Ice::AsyncResultPtr& __result) const
+    {
+        ::sonar::SonarServerPrx __proxy = ::sonar::SonarServerPrx::uncheckedCast(__result->getProxy());
+        ::Ice::Int __ret;
+        try
+        {
+            __ret = __proxy->end_loadConfig(__result);
+        }
+        catch(const ::Ice::Exception& ex)
+        {
+            ::IceInternal::Callback<T, CT>::exception(__result, ex);
+            return;
+        }
+        if(_response)
+        {
+            (::IceInternal::Callback<T, CT>::_callback.get()->*_response)(__ret, CT::dynamicCast(__result->getCookie()));
+        }
+    }
+
+    private:
+
+    Response _response;
+};
+
+template<class T, typename CT> Callback_SonarServer_loadConfigPtr
+newCallback_SonarServer_loadConfig(const IceUtil::Handle<T>& instance, void (T::*cb)(::Ice::Int, const CT&), void (T::*excb)(const ::Ice::Exception&, const CT&), void (T::*sentcb)(bool, const CT&) = 0)
+{
+    return new Callback_SonarServer_loadConfig<T, CT>(instance, cb, excb, sentcb);
+}
+
+template<class T, typename CT> Callback_SonarServer_loadConfigPtr
+newCallback_SonarServer_loadConfig(T* instance, void (T::*cb)(::Ice::Int, const CT&), void (T::*excb)(const ::Ice::Exception&, const CT&), void (T::*sentcb)(bool, const CT&) = 0)
+{
+    return new Callback_SonarServer_loadConfig<T, CT>(instance, cb, excb, sentcb);
 }
 
 }
