@@ -1,0 +1,14 @@
+<icegrid>
+    <application name="SonarServer">
+        <node name="raffles">
+            <server id="SonarServer" exe="/home/andy/repos/sonar/cpp/sonarServer" activation="manual">
+              <!--<property name="Ice.Trace.Network" value="1"/> -->
+              <property name="Ice.StdOut" value="/tmp/sonar.txt" />
+              <property name="Ice.StdErr" value="/tmp/sonar.txt" />
+              <property name="IceStorm.TopicManager" value="IceStorm/TopicManager" />
+              <property name="Sonar.Topic" value="dev.sonar" />
+              <adapter name="SonarServer" id="SonarServer" endpoints="tcp -h raffles:ws -h raffles"/>
+            </server>
+        </node>
+    </application>
+</icegrid>
