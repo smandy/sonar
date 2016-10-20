@@ -10,8 +10,13 @@ builders.addSlice2cppBuilder(env)
 env.Slice2cpp(target = ['sonar.cpp', 'sonar.hpp'], source = '../slice/sonar.ice')
 sonar = env.Object(source = 'sonar.cpp')
 
-env.Program('sonarServer.cpp', LIBS = [sonar, 'Ice', 'IceUtil','IceStorm','pthread', 'boost_filesystem', 'boost_system'])
+ruleLoader = env.Object('ruleLoader.cpp')
+timeUtils = env.Object('timeUtils.cpp')
+uptimeRequirement = env.Object('uptimeRequirement.cpp')
+lastNewsRequirement = env.Object('lastNewsRequirement.cpp')
+
+env.Program('sonarServer.cpp', LIBS = [sonar, 'Ice', 'IceUtil','IceStorm','pthread', uptimeRequirement, lastNewsRequirement,ruleLoader, timeUtils, 'boost_filesystem', 'boost_system', ])
 
 env.Program('chronoStuff.cpp', LIBS = ['boost_date_time', 'boost_filesystem', 'boost_system'] )
 
-env.Program('ruleLoaderMain.cpp' , LIBS = ['boost_filesystem', 'boost_system'])
+env.Program('ruleLoaderMain.cpp' , LIBS = [ruleLoader, timeUtils, uptimeRequirement, lastNewsRequirement, 'boost_filesystem', 'boost_system' ])
