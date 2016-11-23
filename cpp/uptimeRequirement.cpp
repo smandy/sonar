@@ -1,9 +1,5 @@
 #include "uptimeRequirement.h"
 
-
-// namespace bp = boost::posix_time;
-// namespace bg = boost::gregorian;
-
 UptimeRequirement::UptimeRequirement(const std::string &s,
                                              const std::string &st,
                                              const std::string et)

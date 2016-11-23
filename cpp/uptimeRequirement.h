@@ -18,7 +18,8 @@ class UptimeRequirement : public Rule {
     UptimeRequirement(const std::string& s,
                    const std::string& st,
                    const std::string et);
-    void check(sonar::ServerStatus &status);
+    
+    virtual void check(sonar::ServerStatus &status);
     
     virtual std::string desc();
 };

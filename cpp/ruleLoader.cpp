@@ -1,7 +1,9 @@
 #include "ruleLoader.h"
 
 std::vector<RulePtr> RuleLoader::parseRules(const std::string &fn) {
+    
     bfs::path p(fn);
+    
     if ( ! bfs::is_regular_file(p) ) {
         std::ostringstream oss;
         oss << "Bad filename : " << fn;

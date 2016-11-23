@@ -47,6 +47,12 @@ const ::std::string __sonar__SonarServerListener__onImage_name = "onImage";
 
 const ::std::string __sonar__SonarServerListener__onUpdate_name = "onUpdate";
 
+const ::std::string __sonar__SonarServerListener__heartbeat_name = "heartbeat";
+
+const ::std::string __sonar__SonarServerListener__serverUp_name = "serverUp";
+
+const ::std::string __sonar__SonarServerListener__serverDown_name = "serverDown";
+
 const ::std::string __sonar__SonarServer__onStatus_name = "onStatus";
 
 const ::std::string __sonar__SonarServer__addListener_name = "addListener";
@@ -89,6 +95,51 @@ IceAsync::sonar::AMD_SonarServerListener_onUpdate::AMD_SonarServerListener_onUpd
 
 void
 IceAsync::sonar::AMD_SonarServerListener_onUpdate::ice_response()
+{
+    if(__validateResponse(true))
+    {
+        __writeEmptyParams();
+        __response();
+    }
+}
+
+IceAsync::sonar::AMD_SonarServerListener_heartbeat::AMD_SonarServerListener_heartbeat(::IceInternal::Incoming& in) :
+    ::IceInternal::IncomingAsync(in)
+{
+}
+
+void
+IceAsync::sonar::AMD_SonarServerListener_heartbeat::ice_response()
+{
+    if(__validateResponse(true))
+    {
+        __writeEmptyParams();
+        __response();
+    }
+}
+
+IceAsync::sonar::AMD_SonarServerListener_serverUp::AMD_SonarServerListener_serverUp(::IceInternal::Incoming& in) :
+    ::IceInternal::IncomingAsync(in)
+{
+}
+
+void
+IceAsync::sonar::AMD_SonarServerListener_serverUp::ice_response()
+{
+    if(__validateResponse(true))
+    {
+        __writeEmptyParams();
+        __response();
+    }
+}
+
+IceAsync::sonar::AMD_SonarServerListener_serverDown::AMD_SonarServerListener_serverDown(::IceInternal::Incoming& in) :
+    ::IceInternal::IncomingAsync(in)
+{
+}
+
+void
+IceAsync::sonar::AMD_SonarServerListener_serverDown::ice_response()
 {
     if(__validateResponse(true))
     {
@@ -321,6 +372,132 @@ void
 IceProxy::sonar::SonarServerListener::end_onUpdate(const ::Ice::AsyncResultPtr& __result)
 {
     __end(__result, __sonar__SonarServerListener__onUpdate_name);
+}
+
+void
+IceProxy::sonar::SonarServerListener::heartbeat(const ::sonar::Update& __p_upd, const ::Ice::Context* __ctx)
+{
+    ::IceInternal::Outgoing __og(this, __sonar__SonarServerListener__heartbeat_name, ::Ice::Normal, __ctx);
+    try
+    {
+        ::IceInternal::BasicStream* __os = __og.startWriteParams(::Ice::DefaultFormat);
+        __os->write(__p_upd);
+        __og.endWriteParams();
+    }
+    catch(const ::Ice::LocalException& __ex)
+    {
+        __og.abort(__ex);
+    }
+    __invoke(__og);
+}
+
+::Ice::AsyncResultPtr
+IceProxy::sonar::SonarServerListener::begin_heartbeat(const ::sonar::Update& __p_upd, const ::Ice::Context* __ctx, const ::IceInternal::CallbackBasePtr& __del, const ::Ice::LocalObjectPtr& __cookie)
+{
+    ::IceInternal::OutgoingAsyncPtr __result = new ::IceInternal::OutgoingAsync(this, __sonar__SonarServerListener__heartbeat_name, __del, __cookie);
+    try
+    {
+        __result->prepare(__sonar__SonarServerListener__heartbeat_name, ::Ice::Normal, __ctx);
+        ::IceInternal::BasicStream* __os = __result->startWriteParams(::Ice::DefaultFormat);
+        __os->write(__p_upd);
+        __result->endWriteParams();
+        __result->invoke();
+    }
+    catch(const ::Ice::Exception& __ex)
+    {
+        __result->abort(__ex);
+    }
+    return __result;
+}
+
+void
+IceProxy::sonar::SonarServerListener::end_heartbeat(const ::Ice::AsyncResultPtr& __result)
+{
+    __end(__result, __sonar__SonarServerListener__heartbeat_name);
+}
+
+void
+IceProxy::sonar::SonarServerListener::serverUp(const ::std::string& __p_msg, const ::Ice::Context* __ctx)
+{
+    ::IceInternal::Outgoing __og(this, __sonar__SonarServerListener__serverUp_name, ::Ice::Normal, __ctx);
+    try
+    {
+        ::IceInternal::BasicStream* __os = __og.startWriteParams(::Ice::DefaultFormat);
+        __os->write(__p_msg);
+        __og.endWriteParams();
+    }
+    catch(const ::Ice::LocalException& __ex)
+    {
+        __og.abort(__ex);
+    }
+    __invoke(__og);
+}
+
+::Ice::AsyncResultPtr
+IceProxy::sonar::SonarServerListener::begin_serverUp(const ::std::string& __p_msg, const ::Ice::Context* __ctx, const ::IceInternal::CallbackBasePtr& __del, const ::Ice::LocalObjectPtr& __cookie)
+{
+    ::IceInternal::OutgoingAsyncPtr __result = new ::IceInternal::OutgoingAsync(this, __sonar__SonarServerListener__serverUp_name, __del, __cookie);
+    try
+    {
+        __result->prepare(__sonar__SonarServerListener__serverUp_name, ::Ice::Normal, __ctx);
+        ::IceInternal::BasicStream* __os = __result->startWriteParams(::Ice::DefaultFormat);
+        __os->write(__p_msg);
+        __result->endWriteParams();
+        __result->invoke();
+    }
+    catch(const ::Ice::Exception& __ex)
+    {
+        __result->abort(__ex);
+    }
+    return __result;
+}
+
+void
+IceProxy::sonar::SonarServerListener::end_serverUp(const ::Ice::AsyncResultPtr& __result)
+{
+    __end(__result, __sonar__SonarServerListener__serverUp_name);
+}
+
+void
+IceProxy::sonar::SonarServerListener::serverDown(const ::std::string& __p_msg, const ::Ice::Context* __ctx)
+{
+    ::IceInternal::Outgoing __og(this, __sonar__SonarServerListener__serverDown_name, ::Ice::Normal, __ctx);
+    try
+    {
+        ::IceInternal::BasicStream* __os = __og.startWriteParams(::Ice::DefaultFormat);
+        __os->write(__p_msg);
+        __og.endWriteParams();
+    }
+    catch(const ::Ice::LocalException& __ex)
+    {
+        __og.abort(__ex);
+    }
+    __invoke(__og);
+}
+
+::Ice::AsyncResultPtr
+IceProxy::sonar::SonarServerListener::begin_serverDown(const ::std::string& __p_msg, const ::Ice::Context* __ctx, const ::IceInternal::CallbackBasePtr& __del, const ::Ice::LocalObjectPtr& __cookie)
+{
+    ::IceInternal::OutgoingAsyncPtr __result = new ::IceInternal::OutgoingAsync(this, __sonar__SonarServerListener__serverDown_name, __del, __cookie);
+    try
+    {
+        __result->prepare(__sonar__SonarServerListener__serverDown_name, ::Ice::Normal, __ctx);
+        ::IceInternal::BasicStream* __os = __result->startWriteParams(::Ice::DefaultFormat);
+        __os->write(__p_msg);
+        __result->endWriteParams();
+        __result->invoke();
+    }
+    catch(const ::Ice::Exception& __ex)
+    {
+        __result->abort(__ex);
+    }
+    return __result;
+}
+
+void
+IceProxy::sonar::SonarServerListener::end_serverDown(const ::Ice::AsyncResultPtr& __result)
+{
+    __end(__result, __sonar__SonarServerListener__serverDown_name);
 }
 
 const ::std::string&
@@ -894,16 +1071,91 @@ sonar::SonarServerListener::___onUpdate(::IceInternal::Incoming& __inS, const ::
     return ::Ice::DispatchAsync;
 }
 
+::Ice::DispatchStatus
+sonar::SonarServerListener::___heartbeat(::IceInternal::Incoming& __inS, const ::Ice::Current& __current)
+{
+    __checkMode(::Ice::Normal, __current.mode);
+    ::IceInternal::BasicStream* __is = __inS.startReadParams();
+    ::sonar::Update __p_upd;
+    __is->read(__p_upd);
+    __inS.endReadParams();
+    ::sonar::AMD_SonarServerListener_heartbeatPtr __cb = new IceAsync::sonar::AMD_SonarServerListener_heartbeat(__inS);
+    try
+    {
+        heartbeat_async(__cb, __p_upd, __current);
+    }
+    catch(const ::std::exception& __ex)
+    {
+        __cb->ice_exception(__ex);
+    }
+    catch(...)
+    {
+        __cb->ice_exception();
+    }
+    return ::Ice::DispatchAsync;
+}
+
+::Ice::DispatchStatus
+sonar::SonarServerListener::___serverUp(::IceInternal::Incoming& __inS, const ::Ice::Current& __current)
+{
+    __checkMode(::Ice::Normal, __current.mode);
+    ::IceInternal::BasicStream* __is = __inS.startReadParams();
+    ::std::string __p_msg;
+    __is->read(__p_msg);
+    __inS.endReadParams();
+    ::sonar::AMD_SonarServerListener_serverUpPtr __cb = new IceAsync::sonar::AMD_SonarServerListener_serverUp(__inS);
+    try
+    {
+        serverUp_async(__cb, __p_msg, __current);
+    }
+    catch(const ::std::exception& __ex)
+    {
+        __cb->ice_exception(__ex);
+    }
+    catch(...)
+    {
+        __cb->ice_exception();
+    }
+    return ::Ice::DispatchAsync;
+}
+
+::Ice::DispatchStatus
+sonar::SonarServerListener::___serverDown(::IceInternal::Incoming& __inS, const ::Ice::Current& __current)
+{
+    __checkMode(::Ice::Normal, __current.mode);
+    ::IceInternal::BasicStream* __is = __inS.startReadParams();
+    ::std::string __p_msg;
+    __is->read(__p_msg);
+    __inS.endReadParams();
+    ::sonar::AMD_SonarServerListener_serverDownPtr __cb = new IceAsync::sonar::AMD_SonarServerListener_serverDown(__inS);
+    try
+    {
+        serverDown_async(__cb, __p_msg, __current);
+    }
+    catch(const ::std::exception& __ex)
+    {
+        __cb->ice_exception(__ex);
+    }
+    catch(...)
+    {
+        __cb->ice_exception();
+    }
+    return ::Ice::DispatchAsync;
+}
+
 namespace
 {
 const ::std::string __sonar__SonarServerListener_all[] =
 {
+    "heartbeat",
     "ice_id",
     "ice_ids",
     "ice_isA",
     "ice_ping",
     "onImage",
-    "onUpdate"
+    "onUpdate",
+    "serverDown",
+    "serverUp"
 };
 
 }
@@ -911,7 +1163,7 @@ const ::std::string __sonar__SonarServerListener_all[] =
 ::Ice::DispatchStatus
 sonar::SonarServerListener::__dispatch(::IceInternal::Incoming& in, const ::Ice::Current& current)
 {
-    ::std::pair< const ::std::string*, const ::std::string*> r = ::std::equal_range(__sonar__SonarServerListener_all, __sonar__SonarServerListener_all + 6, current.operation);
+    ::std::pair< const ::std::string*, const ::std::string*> r = ::std::equal_range(__sonar__SonarServerListener_all, __sonar__SonarServerListener_all + 9, current.operation);
     if(r.first == r.second)
     {
         throw ::Ice::OperationNotExistException(__FILE__, __LINE__, current.id, current.facet, current.operation);
@@ -921,27 +1173,39 @@ sonar::SonarServerListener::__dispatch(::IceInternal::Incoming& in, const ::Ice:
     {
         case 0:
         {
-            return ___ice_id(in, current);
+            return ___heartbeat(in, current);
         }
         case 1:
         {
-            return ___ice_ids(in, current);
+            return ___ice_id(in, current);
         }
         case 2:
         {
-            return ___ice_isA(in, current);
+            return ___ice_ids(in, current);
         }
         case 3:
         {
-            return ___ice_ping(in, current);
+            return ___ice_isA(in, current);
         }
         case 4:
         {
-            return ___onImage(in, current);
+            return ___ice_ping(in, current);
         }
         case 5:
         {
+            return ___onImage(in, current);
+        }
+        case 6:
+        {
             return ___onUpdate(in, current);
+        }
+        case 7:
+        {
+            return ___serverDown(in, current);
+        }
+        case 8:
+        {
+            return ___serverUp(in, current);
         }
     }
 

@@ -243,6 +243,33 @@ public:
 
 typedef ::IceUtil::Handle< ::sonar::AMD_SonarServerListener_onUpdate> AMD_SonarServerListener_onUpdatePtr;
 
+class AMD_SonarServerListener_heartbeat : virtual public ::Ice::AMDCallback
+{
+public:
+
+    virtual void ice_response() = 0;
+};
+
+typedef ::IceUtil::Handle< ::sonar::AMD_SonarServerListener_heartbeat> AMD_SonarServerListener_heartbeatPtr;
+
+class AMD_SonarServerListener_serverUp : virtual public ::Ice::AMDCallback
+{
+public:
+
+    virtual void ice_response() = 0;
+};
+
+typedef ::IceUtil::Handle< ::sonar::AMD_SonarServerListener_serverUp> AMD_SonarServerListener_serverUpPtr;
+
+class AMD_SonarServerListener_serverDown : virtual public ::Ice::AMDCallback
+{
+public:
+
+    virtual void ice_response() = 0;
+};
+
+typedef ::IceUtil::Handle< ::sonar::AMD_SonarServerListener_serverDown> AMD_SonarServerListener_serverDownPtr;
+
 class AMD_SonarServer_onStatus : virtual public ::Ice::AMDCallback
 {
 public:
@@ -332,6 +359,33 @@ public:
     virtual void ice_response();
 };
 
+class AMD_SonarServerListener_heartbeat : public ::sonar::AMD_SonarServerListener_heartbeat, public ::IceInternal::IncomingAsync
+{
+public:
+
+    AMD_SonarServerListener_heartbeat(::IceInternal::Incoming&);
+
+    virtual void ice_response();
+};
+
+class AMD_SonarServerListener_serverUp : public ::sonar::AMD_SonarServerListener_serverUp, public ::IceInternal::IncomingAsync
+{
+public:
+
+    AMD_SonarServerListener_serverUp(::IceInternal::Incoming&);
+
+    virtual void ice_response();
+};
+
+class AMD_SonarServerListener_serverDown : public ::sonar::AMD_SonarServerListener_serverDown, public ::IceInternal::IncomingAsync
+{
+public:
+
+    AMD_SonarServerListener_serverDown(::IceInternal::Incoming&);
+
+    virtual void ice_response();
+};
+
 class AMD_SonarServer_onStatus : public ::sonar::AMD_SonarServer_onStatus, public ::IceInternal::IncomingAsync
 {
 public:
@@ -407,6 +461,15 @@ typedef ::IceUtil::Handle< Callback_SonarServerListener_onImage_Base> Callback_S
 
 class Callback_SonarServerListener_onUpdate_Base : virtual public ::IceInternal::CallbackBase { };
 typedef ::IceUtil::Handle< Callback_SonarServerListener_onUpdate_Base> Callback_SonarServerListener_onUpdatePtr;
+
+class Callback_SonarServerListener_heartbeat_Base : virtual public ::IceInternal::CallbackBase { };
+typedef ::IceUtil::Handle< Callback_SonarServerListener_heartbeat_Base> Callback_SonarServerListener_heartbeatPtr;
+
+class Callback_SonarServerListener_serverUp_Base : virtual public ::IceInternal::CallbackBase { };
+typedef ::IceUtil::Handle< Callback_SonarServerListener_serverUp_Base> Callback_SonarServerListener_serverUpPtr;
+
+class Callback_SonarServerListener_serverDown_Base : virtual public ::IceInternal::CallbackBase { };
+typedef ::IceUtil::Handle< Callback_SonarServerListener_serverDown_Base> Callback_SonarServerListener_serverDownPtr;
 
 class Callback_SonarServer_onStatus_Base : virtual public ::IceInternal::CallbackBase { };
 typedef ::IceUtil::Handle< Callback_SonarServer_onStatus_Base> Callback_SonarServer_onStatusPtr;
@@ -578,6 +641,216 @@ private:
 
     void onUpdate(const ::sonar::Update&, const ::Ice::Context*);
     ::Ice::AsyncResultPtr begin_onUpdate(const ::sonar::Update&, const ::Ice::Context*, const ::IceInternal::CallbackBasePtr&, const ::Ice::LocalObjectPtr& __cookie = 0);
+    
+public:
+
+    void heartbeat(const ::sonar::Update& __p_upd)
+    {
+        heartbeat(__p_upd, 0);
+    }
+    void heartbeat(const ::sonar::Update& __p_upd, const ::Ice::Context& __ctx)
+    {
+        heartbeat(__p_upd, &__ctx);
+    }
+#ifdef ICE_CPP11
+    ::Ice::AsyncResultPtr
+    begin_heartbeat(const ::sonar::Update& __p_upd, const ::IceInternal::Function<void ()>& __response, const ::IceInternal::Function<void (const ::Ice::Exception&)>& __exception = ::IceInternal::Function<void (const ::Ice::Exception&)>(), const ::IceInternal::Function<void (bool)>& __sent = ::IceInternal::Function<void (bool)>())
+    {
+        return begin_heartbeat(__p_upd, 0, new ::IceInternal::Cpp11FnOnewayCallbackNC(__response, __exception, __sent));
+    }
+    ::Ice::AsyncResultPtr
+    begin_heartbeat(const ::sonar::Update& __p_upd, const ::IceInternal::Function<void (const ::Ice::AsyncResultPtr&)>& __completed, const ::IceInternal::Function<void (const ::Ice::AsyncResultPtr&)>& __sent = ::IceInternal::Function<void (const ::Ice::AsyncResultPtr&)>())
+    {
+        return begin_heartbeat(__p_upd, 0, ::Ice::newCallback(__completed, __sent), 0);
+    }
+    ::Ice::AsyncResultPtr
+    begin_heartbeat(const ::sonar::Update& __p_upd, const ::Ice::Context& __ctx, const ::IceInternal::Function<void ()>& __response, const ::IceInternal::Function<void (const ::Ice::Exception&)>& __exception = ::IceInternal::Function<void (const ::Ice::Exception&)>(), const ::IceInternal::Function<void (bool)>& __sent = ::IceInternal::Function<void (bool)>())
+    {
+        return begin_heartbeat(__p_upd, &__ctx, new ::IceInternal::Cpp11FnOnewayCallbackNC(__response, __exception, __sent), 0);
+    }
+    ::Ice::AsyncResultPtr
+    begin_heartbeat(const ::sonar::Update& __p_upd, const ::Ice::Context& __ctx, const ::IceInternal::Function<void (const ::Ice::AsyncResultPtr&)>& __completed, const ::IceInternal::Function<void (const ::Ice::AsyncResultPtr&)>& __sent = ::IceInternal::Function<void (const ::Ice::AsyncResultPtr&)>())
+    {
+        return begin_heartbeat(__p_upd, &__ctx, ::Ice::newCallback(__completed, __sent));
+    }
+#endif
+
+    ::Ice::AsyncResultPtr begin_heartbeat(const ::sonar::Update& __p_upd)
+    {
+        return begin_heartbeat(__p_upd, 0, ::IceInternal::__dummyCallback, 0);
+    }
+
+    ::Ice::AsyncResultPtr begin_heartbeat(const ::sonar::Update& __p_upd, const ::Ice::Context& __ctx)
+    {
+        return begin_heartbeat(__p_upd, &__ctx, ::IceInternal::__dummyCallback, 0);
+    }
+
+    ::Ice::AsyncResultPtr begin_heartbeat(const ::sonar::Update& __p_upd, const ::Ice::CallbackPtr& __del, const ::Ice::LocalObjectPtr& __cookie = 0)
+    {
+        return begin_heartbeat(__p_upd, 0, __del, __cookie);
+    }
+
+    ::Ice::AsyncResultPtr begin_heartbeat(const ::sonar::Update& __p_upd, const ::Ice::Context& __ctx, const ::Ice::CallbackPtr& __del, const ::Ice::LocalObjectPtr& __cookie = 0)
+    {
+        return begin_heartbeat(__p_upd, &__ctx, __del, __cookie);
+    }
+
+    ::Ice::AsyncResultPtr begin_heartbeat(const ::sonar::Update& __p_upd, const ::sonar::Callback_SonarServerListener_heartbeatPtr& __del, const ::Ice::LocalObjectPtr& __cookie = 0)
+    {
+        return begin_heartbeat(__p_upd, 0, __del, __cookie);
+    }
+
+    ::Ice::AsyncResultPtr begin_heartbeat(const ::sonar::Update& __p_upd, const ::Ice::Context& __ctx, const ::sonar::Callback_SonarServerListener_heartbeatPtr& __del, const ::Ice::LocalObjectPtr& __cookie = 0)
+    {
+        return begin_heartbeat(__p_upd, &__ctx, __del, __cookie);
+    }
+
+    void end_heartbeat(const ::Ice::AsyncResultPtr&);
+    
+private:
+
+    void heartbeat(const ::sonar::Update&, const ::Ice::Context*);
+    ::Ice::AsyncResultPtr begin_heartbeat(const ::sonar::Update&, const ::Ice::Context*, const ::IceInternal::CallbackBasePtr&, const ::Ice::LocalObjectPtr& __cookie = 0);
+    
+public:
+
+    void serverUp(const ::std::string& __p_msg)
+    {
+        serverUp(__p_msg, 0);
+    }
+    void serverUp(const ::std::string& __p_msg, const ::Ice::Context& __ctx)
+    {
+        serverUp(__p_msg, &__ctx);
+    }
+#ifdef ICE_CPP11
+    ::Ice::AsyncResultPtr
+    begin_serverUp(const ::std::string& __p_msg, const ::IceInternal::Function<void ()>& __response, const ::IceInternal::Function<void (const ::Ice::Exception&)>& __exception = ::IceInternal::Function<void (const ::Ice::Exception&)>(), const ::IceInternal::Function<void (bool)>& __sent = ::IceInternal::Function<void (bool)>())
+    {
+        return begin_serverUp(__p_msg, 0, new ::IceInternal::Cpp11FnOnewayCallbackNC(__response, __exception, __sent));
+    }
+    ::Ice::AsyncResultPtr
+    begin_serverUp(const ::std::string& __p_msg, const ::IceInternal::Function<void (const ::Ice::AsyncResultPtr&)>& __completed, const ::IceInternal::Function<void (const ::Ice::AsyncResultPtr&)>& __sent = ::IceInternal::Function<void (const ::Ice::AsyncResultPtr&)>())
+    {
+        return begin_serverUp(__p_msg, 0, ::Ice::newCallback(__completed, __sent), 0);
+    }
+    ::Ice::AsyncResultPtr
+    begin_serverUp(const ::std::string& __p_msg, const ::Ice::Context& __ctx, const ::IceInternal::Function<void ()>& __response, const ::IceInternal::Function<void (const ::Ice::Exception&)>& __exception = ::IceInternal::Function<void (const ::Ice::Exception&)>(), const ::IceInternal::Function<void (bool)>& __sent = ::IceInternal::Function<void (bool)>())
+    {
+        return begin_serverUp(__p_msg, &__ctx, new ::IceInternal::Cpp11FnOnewayCallbackNC(__response, __exception, __sent), 0);
+    }
+    ::Ice::AsyncResultPtr
+    begin_serverUp(const ::std::string& __p_msg, const ::Ice::Context& __ctx, const ::IceInternal::Function<void (const ::Ice::AsyncResultPtr&)>& __completed, const ::IceInternal::Function<void (const ::Ice::AsyncResultPtr&)>& __sent = ::IceInternal::Function<void (const ::Ice::AsyncResultPtr&)>())
+    {
+        return begin_serverUp(__p_msg, &__ctx, ::Ice::newCallback(__completed, __sent));
+    }
+#endif
+
+    ::Ice::AsyncResultPtr begin_serverUp(const ::std::string& __p_msg)
+    {
+        return begin_serverUp(__p_msg, 0, ::IceInternal::__dummyCallback, 0);
+    }
+
+    ::Ice::AsyncResultPtr begin_serverUp(const ::std::string& __p_msg, const ::Ice::Context& __ctx)
+    {
+        return begin_serverUp(__p_msg, &__ctx, ::IceInternal::__dummyCallback, 0);
+    }
+
+    ::Ice::AsyncResultPtr begin_serverUp(const ::std::string& __p_msg, const ::Ice::CallbackPtr& __del, const ::Ice::LocalObjectPtr& __cookie = 0)
+    {
+        return begin_serverUp(__p_msg, 0, __del, __cookie);
+    }
+
+    ::Ice::AsyncResultPtr begin_serverUp(const ::std::string& __p_msg, const ::Ice::Context& __ctx, const ::Ice::CallbackPtr& __del, const ::Ice::LocalObjectPtr& __cookie = 0)
+    {
+        return begin_serverUp(__p_msg, &__ctx, __del, __cookie);
+    }
+
+    ::Ice::AsyncResultPtr begin_serverUp(const ::std::string& __p_msg, const ::sonar::Callback_SonarServerListener_serverUpPtr& __del, const ::Ice::LocalObjectPtr& __cookie = 0)
+    {
+        return begin_serverUp(__p_msg, 0, __del, __cookie);
+    }
+
+    ::Ice::AsyncResultPtr begin_serverUp(const ::std::string& __p_msg, const ::Ice::Context& __ctx, const ::sonar::Callback_SonarServerListener_serverUpPtr& __del, const ::Ice::LocalObjectPtr& __cookie = 0)
+    {
+        return begin_serverUp(__p_msg, &__ctx, __del, __cookie);
+    }
+
+    void end_serverUp(const ::Ice::AsyncResultPtr&);
+    
+private:
+
+    void serverUp(const ::std::string&, const ::Ice::Context*);
+    ::Ice::AsyncResultPtr begin_serverUp(const ::std::string&, const ::Ice::Context*, const ::IceInternal::CallbackBasePtr&, const ::Ice::LocalObjectPtr& __cookie = 0);
+    
+public:
+
+    void serverDown(const ::std::string& __p_msg)
+    {
+        serverDown(__p_msg, 0);
+    }
+    void serverDown(const ::std::string& __p_msg, const ::Ice::Context& __ctx)
+    {
+        serverDown(__p_msg, &__ctx);
+    }
+#ifdef ICE_CPP11
+    ::Ice::AsyncResultPtr
+    begin_serverDown(const ::std::string& __p_msg, const ::IceInternal::Function<void ()>& __response, const ::IceInternal::Function<void (const ::Ice::Exception&)>& __exception = ::IceInternal::Function<void (const ::Ice::Exception&)>(), const ::IceInternal::Function<void (bool)>& __sent = ::IceInternal::Function<void (bool)>())
+    {
+        return begin_serverDown(__p_msg, 0, new ::IceInternal::Cpp11FnOnewayCallbackNC(__response, __exception, __sent));
+    }
+    ::Ice::AsyncResultPtr
+    begin_serverDown(const ::std::string& __p_msg, const ::IceInternal::Function<void (const ::Ice::AsyncResultPtr&)>& __completed, const ::IceInternal::Function<void (const ::Ice::AsyncResultPtr&)>& __sent = ::IceInternal::Function<void (const ::Ice::AsyncResultPtr&)>())
+    {
+        return begin_serverDown(__p_msg, 0, ::Ice::newCallback(__completed, __sent), 0);
+    }
+    ::Ice::AsyncResultPtr
+    begin_serverDown(const ::std::string& __p_msg, const ::Ice::Context& __ctx, const ::IceInternal::Function<void ()>& __response, const ::IceInternal::Function<void (const ::Ice::Exception&)>& __exception = ::IceInternal::Function<void (const ::Ice::Exception&)>(), const ::IceInternal::Function<void (bool)>& __sent = ::IceInternal::Function<void (bool)>())
+    {
+        return begin_serverDown(__p_msg, &__ctx, new ::IceInternal::Cpp11FnOnewayCallbackNC(__response, __exception, __sent), 0);
+    }
+    ::Ice::AsyncResultPtr
+    begin_serverDown(const ::std::string& __p_msg, const ::Ice::Context& __ctx, const ::IceInternal::Function<void (const ::Ice::AsyncResultPtr&)>& __completed, const ::IceInternal::Function<void (const ::Ice::AsyncResultPtr&)>& __sent = ::IceInternal::Function<void (const ::Ice::AsyncResultPtr&)>())
+    {
+        return begin_serverDown(__p_msg, &__ctx, ::Ice::newCallback(__completed, __sent));
+    }
+#endif
+
+    ::Ice::AsyncResultPtr begin_serverDown(const ::std::string& __p_msg)
+    {
+        return begin_serverDown(__p_msg, 0, ::IceInternal::__dummyCallback, 0);
+    }
+
+    ::Ice::AsyncResultPtr begin_serverDown(const ::std::string& __p_msg, const ::Ice::Context& __ctx)
+    {
+        return begin_serverDown(__p_msg, &__ctx, ::IceInternal::__dummyCallback, 0);
+    }
+
+    ::Ice::AsyncResultPtr begin_serverDown(const ::std::string& __p_msg, const ::Ice::CallbackPtr& __del, const ::Ice::LocalObjectPtr& __cookie = 0)
+    {
+        return begin_serverDown(__p_msg, 0, __del, __cookie);
+    }
+
+    ::Ice::AsyncResultPtr begin_serverDown(const ::std::string& __p_msg, const ::Ice::Context& __ctx, const ::Ice::CallbackPtr& __del, const ::Ice::LocalObjectPtr& __cookie = 0)
+    {
+        return begin_serverDown(__p_msg, &__ctx, __del, __cookie);
+    }
+
+    ::Ice::AsyncResultPtr begin_serverDown(const ::std::string& __p_msg, const ::sonar::Callback_SonarServerListener_serverDownPtr& __del, const ::Ice::LocalObjectPtr& __cookie = 0)
+    {
+        return begin_serverDown(__p_msg, 0, __del, __cookie);
+    }
+
+    ::Ice::AsyncResultPtr begin_serverDown(const ::std::string& __p_msg, const ::Ice::Context& __ctx, const ::sonar::Callback_SonarServerListener_serverDownPtr& __del, const ::Ice::LocalObjectPtr& __cookie = 0)
+    {
+        return begin_serverDown(__p_msg, &__ctx, __del, __cookie);
+    }
+
+    void end_serverDown(const ::Ice::AsyncResultPtr&);
+    
+private:
+
+    void serverDown(const ::std::string&, const ::Ice::Context*);
+    ::Ice::AsyncResultPtr begin_serverDown(const ::std::string&, const ::Ice::Context*, const ::IceInternal::CallbackBasePtr&, const ::Ice::LocalObjectPtr& __cookie = 0);
     
 public:
     
@@ -1334,6 +1607,15 @@ public:
     virtual void onUpdate_async(const ::sonar::AMD_SonarServerListener_onUpdatePtr&, const ::sonar::Update&, const ::Ice::Current& = ::Ice::Current()) = 0;
     ::Ice::DispatchStatus ___onUpdate(::IceInternal::Incoming&, const ::Ice::Current&);
 
+    virtual void heartbeat_async(const ::sonar::AMD_SonarServerListener_heartbeatPtr&, const ::sonar::Update&, const ::Ice::Current& = ::Ice::Current()) = 0;
+    ::Ice::DispatchStatus ___heartbeat(::IceInternal::Incoming&, const ::Ice::Current&);
+
+    virtual void serverUp_async(const ::sonar::AMD_SonarServerListener_serverUpPtr&, const ::std::string&, const ::Ice::Current& = ::Ice::Current()) = 0;
+    ::Ice::DispatchStatus ___serverUp(::IceInternal::Incoming&, const ::Ice::Current&);
+
+    virtual void serverDown_async(const ::sonar::AMD_SonarServerListener_serverDownPtr&, const ::std::string&, const ::Ice::Current& = ::Ice::Current()) = 0;
+    ::Ice::DispatchStatus ___serverDown(::IceInternal::Incoming&, const ::Ice::Current&);
+
     virtual ::Ice::DispatchStatus __dispatch(::IceInternal::Incoming&, const ::Ice::Current&);
 
 protected:
@@ -1572,6 +1854,252 @@ template<class T, typename CT> Callback_SonarServerListener_onUpdatePtr
 newCallback_SonarServerListener_onUpdate(T* instance, void (T::*excb)(const ::Ice::Exception&, const CT&), void (T::*sentcb)(bool, const CT&) = 0)
 {
     return new Callback_SonarServerListener_onUpdate<T, CT>(instance, 0, excb, sentcb);
+}
+
+template<class T>
+class CallbackNC_SonarServerListener_heartbeat : public Callback_SonarServerListener_heartbeat_Base, public ::IceInternal::OnewayCallbackNC<T>
+{
+public:
+
+    typedef IceUtil::Handle<T> TPtr;
+
+    typedef void (T::*Exception)(const ::Ice::Exception&);
+    typedef void (T::*Sent)(bool);
+    typedef void (T::*Response)();
+
+    CallbackNC_SonarServerListener_heartbeat(const TPtr& obj, Response cb, Exception excb, Sent sentcb)
+        : ::IceInternal::OnewayCallbackNC<T>(obj, cb, excb, sentcb)
+    {
+    }
+};
+
+template<class T> Callback_SonarServerListener_heartbeatPtr
+newCallback_SonarServerListener_heartbeat(const IceUtil::Handle<T>& instance, void (T::*cb)(), void (T::*excb)(const ::Ice::Exception&), void (T::*sentcb)(bool) = 0)
+{
+    return new CallbackNC_SonarServerListener_heartbeat<T>(instance, cb, excb, sentcb);
+}
+
+template<class T> Callback_SonarServerListener_heartbeatPtr
+newCallback_SonarServerListener_heartbeat(const IceUtil::Handle<T>& instance, void (T::*excb)(const ::Ice::Exception&), void (T::*sentcb)(bool) = 0)
+{
+    return new CallbackNC_SonarServerListener_heartbeat<T>(instance, 0, excb, sentcb);
+}
+
+template<class T> Callback_SonarServerListener_heartbeatPtr
+newCallback_SonarServerListener_heartbeat(T* instance, void (T::*cb)(), void (T::*excb)(const ::Ice::Exception&), void (T::*sentcb)(bool) = 0)
+{
+    return new CallbackNC_SonarServerListener_heartbeat<T>(instance, cb, excb, sentcb);
+}
+
+template<class T> Callback_SonarServerListener_heartbeatPtr
+newCallback_SonarServerListener_heartbeat(T* instance, void (T::*excb)(const ::Ice::Exception&), void (T::*sentcb)(bool) = 0)
+{
+    return new CallbackNC_SonarServerListener_heartbeat<T>(instance, 0, excb, sentcb);
+}
+
+template<class T, typename CT>
+class Callback_SonarServerListener_heartbeat : public Callback_SonarServerListener_heartbeat_Base, public ::IceInternal::OnewayCallback<T, CT>
+{
+public:
+
+    typedef IceUtil::Handle<T> TPtr;
+
+    typedef void (T::*Exception)(const ::Ice::Exception& , const CT&);
+    typedef void (T::*Sent)(bool , const CT&);
+    typedef void (T::*Response)(const CT&);
+
+    Callback_SonarServerListener_heartbeat(const TPtr& obj, Response cb, Exception excb, Sent sentcb)
+        : ::IceInternal::OnewayCallback<T, CT>(obj, cb, excb, sentcb)
+    {
+    }
+};
+
+template<class T, typename CT> Callback_SonarServerListener_heartbeatPtr
+newCallback_SonarServerListener_heartbeat(const IceUtil::Handle<T>& instance, void (T::*cb)(const CT&), void (T::*excb)(const ::Ice::Exception&, const CT&), void (T::*sentcb)(bool, const CT&) = 0)
+{
+    return new Callback_SonarServerListener_heartbeat<T, CT>(instance, cb, excb, sentcb);
+}
+
+template<class T, typename CT> Callback_SonarServerListener_heartbeatPtr
+newCallback_SonarServerListener_heartbeat(const IceUtil::Handle<T>& instance, void (T::*excb)(const ::Ice::Exception&, const CT&), void (T::*sentcb)(bool, const CT&) = 0)
+{
+    return new Callback_SonarServerListener_heartbeat<T, CT>(instance, 0, excb, sentcb);
+}
+
+template<class T, typename CT> Callback_SonarServerListener_heartbeatPtr
+newCallback_SonarServerListener_heartbeat(T* instance, void (T::*cb)(const CT&), void (T::*excb)(const ::Ice::Exception&, const CT&), void (T::*sentcb)(bool, const CT&) = 0)
+{
+    return new Callback_SonarServerListener_heartbeat<T, CT>(instance, cb, excb, sentcb);
+}
+
+template<class T, typename CT> Callback_SonarServerListener_heartbeatPtr
+newCallback_SonarServerListener_heartbeat(T* instance, void (T::*excb)(const ::Ice::Exception&, const CT&), void (T::*sentcb)(bool, const CT&) = 0)
+{
+    return new Callback_SonarServerListener_heartbeat<T, CT>(instance, 0, excb, sentcb);
+}
+
+template<class T>
+class CallbackNC_SonarServerListener_serverUp : public Callback_SonarServerListener_serverUp_Base, public ::IceInternal::OnewayCallbackNC<T>
+{
+public:
+
+    typedef IceUtil::Handle<T> TPtr;
+
+    typedef void (T::*Exception)(const ::Ice::Exception&);
+    typedef void (T::*Sent)(bool);
+    typedef void (T::*Response)();
+
+    CallbackNC_SonarServerListener_serverUp(const TPtr& obj, Response cb, Exception excb, Sent sentcb)
+        : ::IceInternal::OnewayCallbackNC<T>(obj, cb, excb, sentcb)
+    {
+    }
+};
+
+template<class T> Callback_SonarServerListener_serverUpPtr
+newCallback_SonarServerListener_serverUp(const IceUtil::Handle<T>& instance, void (T::*cb)(), void (T::*excb)(const ::Ice::Exception&), void (T::*sentcb)(bool) = 0)
+{
+    return new CallbackNC_SonarServerListener_serverUp<T>(instance, cb, excb, sentcb);
+}
+
+template<class T> Callback_SonarServerListener_serverUpPtr
+newCallback_SonarServerListener_serverUp(const IceUtil::Handle<T>& instance, void (T::*excb)(const ::Ice::Exception&), void (T::*sentcb)(bool) = 0)
+{
+    return new CallbackNC_SonarServerListener_serverUp<T>(instance, 0, excb, sentcb);
+}
+
+template<class T> Callback_SonarServerListener_serverUpPtr
+newCallback_SonarServerListener_serverUp(T* instance, void (T::*cb)(), void (T::*excb)(const ::Ice::Exception&), void (T::*sentcb)(bool) = 0)
+{
+    return new CallbackNC_SonarServerListener_serverUp<T>(instance, cb, excb, sentcb);
+}
+
+template<class T> Callback_SonarServerListener_serverUpPtr
+newCallback_SonarServerListener_serverUp(T* instance, void (T::*excb)(const ::Ice::Exception&), void (T::*sentcb)(bool) = 0)
+{
+    return new CallbackNC_SonarServerListener_serverUp<T>(instance, 0, excb, sentcb);
+}
+
+template<class T, typename CT>
+class Callback_SonarServerListener_serverUp : public Callback_SonarServerListener_serverUp_Base, public ::IceInternal::OnewayCallback<T, CT>
+{
+public:
+
+    typedef IceUtil::Handle<T> TPtr;
+
+    typedef void (T::*Exception)(const ::Ice::Exception& , const CT&);
+    typedef void (T::*Sent)(bool , const CT&);
+    typedef void (T::*Response)(const CT&);
+
+    Callback_SonarServerListener_serverUp(const TPtr& obj, Response cb, Exception excb, Sent sentcb)
+        : ::IceInternal::OnewayCallback<T, CT>(obj, cb, excb, sentcb)
+    {
+    }
+};
+
+template<class T, typename CT> Callback_SonarServerListener_serverUpPtr
+newCallback_SonarServerListener_serverUp(const IceUtil::Handle<T>& instance, void (T::*cb)(const CT&), void (T::*excb)(const ::Ice::Exception&, const CT&), void (T::*sentcb)(bool, const CT&) = 0)
+{
+    return new Callback_SonarServerListener_serverUp<T, CT>(instance, cb, excb, sentcb);
+}
+
+template<class T, typename CT> Callback_SonarServerListener_serverUpPtr
+newCallback_SonarServerListener_serverUp(const IceUtil::Handle<T>& instance, void (T::*excb)(const ::Ice::Exception&, const CT&), void (T::*sentcb)(bool, const CT&) = 0)
+{
+    return new Callback_SonarServerListener_serverUp<T, CT>(instance, 0, excb, sentcb);
+}
+
+template<class T, typename CT> Callback_SonarServerListener_serverUpPtr
+newCallback_SonarServerListener_serverUp(T* instance, void (T::*cb)(const CT&), void (T::*excb)(const ::Ice::Exception&, const CT&), void (T::*sentcb)(bool, const CT&) = 0)
+{
+    return new Callback_SonarServerListener_serverUp<T, CT>(instance, cb, excb, sentcb);
+}
+
+template<class T, typename CT> Callback_SonarServerListener_serverUpPtr
+newCallback_SonarServerListener_serverUp(T* instance, void (T::*excb)(const ::Ice::Exception&, const CT&), void (T::*sentcb)(bool, const CT&) = 0)
+{
+    return new Callback_SonarServerListener_serverUp<T, CT>(instance, 0, excb, sentcb);
+}
+
+template<class T>
+class CallbackNC_SonarServerListener_serverDown : public Callback_SonarServerListener_serverDown_Base, public ::IceInternal::OnewayCallbackNC<T>
+{
+public:
+
+    typedef IceUtil::Handle<T> TPtr;
+
+    typedef void (T::*Exception)(const ::Ice::Exception&);
+    typedef void (T::*Sent)(bool);
+    typedef void (T::*Response)();
+
+    CallbackNC_SonarServerListener_serverDown(const TPtr& obj, Response cb, Exception excb, Sent sentcb)
+        : ::IceInternal::OnewayCallbackNC<T>(obj, cb, excb, sentcb)
+    {
+    }
+};
+
+template<class T> Callback_SonarServerListener_serverDownPtr
+newCallback_SonarServerListener_serverDown(const IceUtil::Handle<T>& instance, void (T::*cb)(), void (T::*excb)(const ::Ice::Exception&), void (T::*sentcb)(bool) = 0)
+{
+    return new CallbackNC_SonarServerListener_serverDown<T>(instance, cb, excb, sentcb);
+}
+
+template<class T> Callback_SonarServerListener_serverDownPtr
+newCallback_SonarServerListener_serverDown(const IceUtil::Handle<T>& instance, void (T::*excb)(const ::Ice::Exception&), void (T::*sentcb)(bool) = 0)
+{
+    return new CallbackNC_SonarServerListener_serverDown<T>(instance, 0, excb, sentcb);
+}
+
+template<class T> Callback_SonarServerListener_serverDownPtr
+newCallback_SonarServerListener_serverDown(T* instance, void (T::*cb)(), void (T::*excb)(const ::Ice::Exception&), void (T::*sentcb)(bool) = 0)
+{
+    return new CallbackNC_SonarServerListener_serverDown<T>(instance, cb, excb, sentcb);
+}
+
+template<class T> Callback_SonarServerListener_serverDownPtr
+newCallback_SonarServerListener_serverDown(T* instance, void (T::*excb)(const ::Ice::Exception&), void (T::*sentcb)(bool) = 0)
+{
+    return new CallbackNC_SonarServerListener_serverDown<T>(instance, 0, excb, sentcb);
+}
+
+template<class T, typename CT>
+class Callback_SonarServerListener_serverDown : public Callback_SonarServerListener_serverDown_Base, public ::IceInternal::OnewayCallback<T, CT>
+{
+public:
+
+    typedef IceUtil::Handle<T> TPtr;
+
+    typedef void (T::*Exception)(const ::Ice::Exception& , const CT&);
+    typedef void (T::*Sent)(bool , const CT&);
+    typedef void (T::*Response)(const CT&);
+
+    Callback_SonarServerListener_serverDown(const TPtr& obj, Response cb, Exception excb, Sent sentcb)
+        : ::IceInternal::OnewayCallback<T, CT>(obj, cb, excb, sentcb)
+    {
+    }
+};
+
+template<class T, typename CT> Callback_SonarServerListener_serverDownPtr
+newCallback_SonarServerListener_serverDown(const IceUtil::Handle<T>& instance, void (T::*cb)(const CT&), void (T::*excb)(const ::Ice::Exception&, const CT&), void (T::*sentcb)(bool, const CT&) = 0)
+{
+    return new Callback_SonarServerListener_serverDown<T, CT>(instance, cb, excb, sentcb);
+}
+
+template<class T, typename CT> Callback_SonarServerListener_serverDownPtr
+newCallback_SonarServerListener_serverDown(const IceUtil::Handle<T>& instance, void (T::*excb)(const ::Ice::Exception&, const CT&), void (T::*sentcb)(bool, const CT&) = 0)
+{
+    return new Callback_SonarServerListener_serverDown<T, CT>(instance, 0, excb, sentcb);
+}
+
+template<class T, typename CT> Callback_SonarServerListener_serverDownPtr
+newCallback_SonarServerListener_serverDown(T* instance, void (T::*cb)(const CT&), void (T::*excb)(const ::Ice::Exception&, const CT&), void (T::*sentcb)(bool, const CT&) = 0)
+{
+    return new Callback_SonarServerListener_serverDown<T, CT>(instance, cb, excb, sentcb);
+}
+
+template<class T, typename CT> Callback_SonarServerListener_serverDownPtr
+newCallback_SonarServerListener_serverDown(T* instance, void (T::*excb)(const ::Ice::Exception&, const CT&), void (T::*sentcb)(bool, const CT&) = 0)
+{
+    return new Callback_SonarServerListener_serverDown<T, CT>(instance, 0, excb, sentcb);
 }
 
 template<class T>

@@ -12,7 +12,6 @@ class SonarServerImpl : public sonar::SonarServer {
     IceStorm::TopicPrx   topic;
     std::set<sonar::SonarServerListenerPrx> listeners;
     std::vector<RulePtr> rules;
-    
 public:
     SonarServerImpl( Ice::CommunicatorPtr _communicator) : communicator( _communicator) {
         auto topicPrx = IceStorm::TopicManagerPrx::checkedCast( communicator->propertyToProxy("IceStorm.TopicManager"));

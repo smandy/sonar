@@ -5,7 +5,7 @@
 
 module sonar {
     enum Status { OK, WARN, ERROR };
-
+    
     sequence<Status> StatusSeq;
     
     struct ServerStatus {
@@ -26,8 +26,12 @@ module sonar {
     };
     
     interface SonarServerListener {
-        ["amd"] void onImage( Image img);
+        ["amd"] void onImage( Image img );
         ["amd"] void onUpdate( Update upd);
+        
+        ["amd"] void heartbeat( Update upd);
+        ["amd"] void serverUp(string msg);
+        ["amd"] void serverDown(string msg);
     };
     
     interface SonarServer {
