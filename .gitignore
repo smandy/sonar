@@ -17,3 +17,6 @@
 /cpp/ruleLoaderMain
 /cpp/sonarServer
 *.pyc
+/GPATH
+/GRTAGS
+/GTAGS

@@ -6,12 +6,18 @@
 #include <vector>
 #include "ruleLoader.h"
 #include <signal.h>
+#include <spdlog/spdlog.h>
+
+using loggerType = std::shared_ptr<spdlog::logger>;
 
 class SonarServerImpl : public sonar::SonarServer {
     Ice::CommunicatorPtr communicator;
     IceStorm::TopicPrx   topic;
     std::set<sonar::SonarServerListenerPrx> listeners;
     std::vector<RulePtr> rules;
+    std::vector<sonar::ServerStatus> statuses;
+
+    static loggerType log;
 public:
     SonarServerImpl( Ice::CommunicatorPtr _communicator) : communicator( _communicator) {
         auto topicPrx = IceStorm::TopicManagerPrx::checkedCast( communicator->propertyToProxy("IceStorm.TopicManager"));
@@ -24,21 +30,37 @@ public:
         listeners.insert(sonar::SonarServerListenerPrx::uncheckedCast(topic->getPublisher()));
     }
 
-    virtual void addListenerByIdent_async(const ::sonar::AMD_SonarServer_addListenerByIdentPtr&,
+    virtual void addListenerByIdent_async(const ::sonar::AMD_SonarServer_addListenerByIdentPtr& cb,
                                           const ::Ice::Identity& ident,
-                                          const ::Ice::Current& = ::Ice::Current()) {
+                                          const ::Ice::Current& current = ::Ice::Current()) {
+
+        log->info("Addlistener with ident {} {}", ident.name, ident.category);
+        ::sonar::SonarServerListenerPrx client = ::sonar::SonarServerListenerPrx::uncheckedCast(current.con->createProxy(ident));
+        sonar::Image img { statuses };
+        //std::cout << "Made image " << std::endl;
+        client->begin_onImage( img ,
+                               [this,client]() {
+                                   log->debug("Success with image");
+                                   listeners.insert(client);
+                               },
+                               [](const Ice::Exception& ex) {
+                                   log->error("Failed to send to listener - sod him {}", ex.what());
+                               });
+        cb->ice_response();
+
+        
     }
 
     virtual void removeListenerByIdent_async(const ::sonar::AMD_SonarServer_removeListenerByIdentPtr&,
                                              const ::Ice::Identity&,
                                              const ::Ice::Current& = ::Ice::Current()) {
+        
+        
     }
 
-    std::vector<sonar::ServerStatus> statuses;
     void onStatus_async(const ::sonar::AMD_SonarServer_onStatusPtr& cb,
                         const ::sonar::ServerStatusSeq& stats,
                         const ::Ice::Current& = ::Ice::Current()) { 
-        static thread_local sonar::ServerStatus finder;
         for ( const auto& stat : stats ) {
             std::cout << "On status " << stat.id << std::endl;
             const auto x = std::lower_bound( begin(statuses),
@@ -104,27 +126,31 @@ void reloadConfig(int x) {
 };
 
 int main(int argc, char *argv[]) {
+    auto log = spdlog::rotating_logger_mt("log", "/tmp/sonar", 1048576 * 5, 3);
+    
     signal(SIGHUP, reloadConfig);
-    std::cout << "Make communicator" << std::endl;
+    log->info("Make communicator");
     auto communicator = Ice::initialize(argc, argv);
-    std::cout << "Make server" << std::endl;
+    log->info("Make server");
     
     auto server = std::make_shared<SonarServerImpl>(communicator);
     instance = server;
     
-    std::cout << "Make adapter" << std::endl;
+    log->info("Make adapter");
     auto adapter = communicator->createObjectAdapter("SonarServer");
-    std::cout << "Add impl to adapter" << std::endl;
+    log->info("Add impl to adapter");
     // Liveness of server ensured by scope of main
     auto prx =
         adapter->add(server.get(), communicator->stringToIdentity("server"));
-    std::cout << "Activate adpater" << std::endl;
+    log->info("Activate adpater");
     adapter->activate();
-    std::cout << "Wait for shutdown" << std::endl;
+    log->info("Wait for shutdown");
     communicator->waitForShutdown();
-    std::cout << "Shutdown - exiting" << std::endl;
+    log->info("Shutdown - exiting");
 
     adapter->deactivate();
 
     communicator->destroy();
 };
+
+loggerType SonarServerImpl::log {};

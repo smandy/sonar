@@ -1,7 +1,6 @@
 #include "ruleLoader.h"
 
 std::vector<RulePtr> RuleLoader::parseRules(const std::string &fn) {
-    
     bfs::path p(fn);
     
     if ( ! bfs::is_regular_file(p) ) {
@@ -9,7 +8,7 @@ std::vector<RulePtr> RuleLoader::parseRules(const std::string &fn) {
         oss << "Bad filename : " << fn;
         throw std::invalid_argument( oss.str() );
     };
-      
+    
     std::vector<RulePtr> ret{};
     std::ifstream is(fn);
     std::array<char, 128> buf;
@@ -38,8 +37,6 @@ std::vector<RulePtr> RuleLoader::parseRules(const std::string &fn) {
                       << " in non-trivial line : ";
             pp(std::cout, tokens);
         };
-
-      
     };
     return ret;
 }
