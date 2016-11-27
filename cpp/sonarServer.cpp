@@ -33,7 +33,6 @@ public:
     virtual void addListenerByIdent_async(const ::sonar::AMD_SonarServer_addListenerByIdentPtr& cb,
                                           const ::Ice::Identity& ident,
                                           const ::Ice::Current& current = ::Ice::Current()) {
-
         log->info("Addlistener with ident {} {}", ident.name, ident.category);
         ::sonar::SonarServerListenerPrx client = ::sonar::SonarServerListenerPrx::uncheckedCast(current.con->createProxy(ident));
         sonar::Image img { statuses };
@@ -47,15 +46,16 @@ public:
                                    log->error("Failed to send to listener - sod him {}", ex.what());
                                });
         cb->ice_response();
-
-        
     }
 
     virtual void removeListenerByIdent_async(const ::sonar::AMD_SonarServer_removeListenerByIdentPtr&,
-                                             const ::Ice::Identity&,
-                                             const ::Ice::Current& = ::Ice::Current()) {
+                                             const ::Ice::Identity& ident,
+                                             const ::Ice::Current& current = ::Ice::Current()) {
         
-        
+        ::sonar::SonarServerListenerPrx client = ::sonar::SonarServerListenerPrx::uncheckedCast(current.con->createProxy(ident));
+
+        size_t removed = listeners.erase(client);
+        log->info("Removed {} clients", removed);
     }
 
     void onStatus_async(const ::sonar::AMD_SonarServer_onStatusPtr& cb,
