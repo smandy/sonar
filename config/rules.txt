@@ -5,6 +5,6 @@
 
 upTime   SonarServer  10:00:00 11:00:00
 
-upTime   SonarServer  10:00:00 11:00:00 fart fart
+upTime   SonarServer  10:00:00 11:00:00 
 
 lastNews TradeWeb     11:45:00 12:35:00
