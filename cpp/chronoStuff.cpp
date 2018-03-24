@@ -9,7 +9,6 @@ struct TD;
 
 int main( int argc,
           char *argv[] ) {
-    
     std::chrono::system_clock::time_point now = std::chrono::system_clock::now();
     time_t tt = std::chrono::system_clock::to_time_t(now);
     
@@ -62,10 +61,4 @@ int main( int argc,
     
     std::cout << std::atoi( "09") << std::endl;
     std::cout << std::atoi( "2") << std::endl;
-
-    // auto x10 = bp::hours(4);
-    // TD<decltype(x)> myX;
-
-    // TD<decltype(st)> st2;
-
-};
+}
