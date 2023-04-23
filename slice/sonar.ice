@@ -41,8 +41,8 @@ module sonar {
         ["amd"] void addListener( SonarServerListener listener);
         ["amd"] void removeListener( SonarServerListener listener);
         
-        ["amd"] void addListenerByIdent( Ice::Identity listener);
-        ["amd"] void removeListenerByIdent( Ice::Identity listener);
+        // ["amd"] void addListenerByIdent( Ice::Identity listener);
+        // ["amd"] void removeListenerByIdent( Ice::Identity listener);
         
         // Diagnostic - just for debug
         ["amd"] ServerStatusSeq getStatuses();

@@ -7,6 +7,7 @@
 #include "ruleLoader.h"
 #include <signal.h>
 #include <spdlog/spdlog.h>
+#include "spdlog/sinks/rotating_file_sink.h"
 
 using loggerType = std::shared_ptr<spdlog::logger>;
 
@@ -30,33 +31,33 @@ public:
         listeners.insert(sonar::SonarServerListenerPrx::uncheckedCast(topic->getPublisher()));
     }
 
-    virtual void addListenerByIdent_async(const ::sonar::AMD_SonarServer_addListenerByIdentPtr& cb,
-                                          const ::Ice::Identity& ident,
-                                          const ::Ice::Current& current = ::Ice::Current()) {
-        log->info("Addlistener with ident {} {}", ident.name, ident.category);
-        ::sonar::SonarServerListenerPrx client = ::sonar::SonarServerListenerPrx::uncheckedCast(current.con->createProxy(ident));
-        sonar::Image img { statuses };
-        //std::cout << "Made image " << std::endl;
-        client->begin_onImage( img ,
-                               [this,client]() {
-                                   log->debug("Success with image");
-                                   listeners.insert(client);
-                               },
-                               [](const Ice::Exception& ex) {
-                                   log->error("Failed to send to listener - sod him {}", ex.what());
-                               });
-        cb->ice_response();
-    }
+    // virtual void addListenerByIdent_async(const ::sonar::AMD_SonarServer_addListenerByIdentPtr& cb,
+    //                                       const ::Ice::Identity& ident,
+    //                                       const ::Ice::Current& current = ::Ice::Current()) {
+    //     log->info("Addlistener with ident {} {}", ident.name, ident.category);
+    //     ::sonar::SonarServerListenerPrx client = ::sonar::SonarServerListenerPrx::uncheckedCast(current.con->createProxy(ident));
+    //     sonar::Image img { statuses };
+    //     //std::cout << "Made image " << std::endl;
+    //     client->onImageAsync( img ,
+    //                            [this,client]() {
+    //                                log->debug("Success with image");
+    //                                listeners.insert(client);
+    //                            },
+    //                            [](const Ice::Exception& ex) {
+    //                                log->error("Failed to send to listener - sod him {}", ex.what());
+    //                            });
+    //     cb->ice_response();
+    // }
 
-    virtual void removeListenerByIdent_async(const ::sonar::AMD_SonarServer_removeListenerByIdentPtr&,
-                                             const ::Ice::Identity& ident,
-                                             const ::Ice::Current& current = ::Ice::Current()) {
+    // virtual void removeListenerByIdent_async(const ::sonar::AMD_SonarServer_removeListenerByIdentPtr&,
+    //                                          const ::Ice::Identity& ident,
+    //                                          const ::Ice::Current& current = ::Ice::Current()) {
         
-        ::sonar::SonarServerListenerPrx client = ::sonar::SonarServerListenerPrx::uncheckedCast(current.con->createProxy(ident));
+    //     ::sonar::SonarServerListenerPrx client = ::sonar::SonarServerListenerPrx::uncheckedCast(current.con->createProxy(ident));
 
-        size_t removed = listeners.erase(client);
-        log->info("Removed {} clients", removed);
-    }
+    //     size_t removed = listeners.erase(client);
+    //     log->info("Removed {} clients", removed);
+    // }
 
     void onStatus_async(const ::sonar::AMD_SonarServer_onStatusPtr& cb,
                         const ::sonar::ServerStatusSeq& stats,
@@ -141,7 +142,7 @@ int main(int argc, char *argv[]) {
     log->info("Add impl to adapter");
     // Liveness of server ensured by scope of main
     auto prx =
-        adapter->add(server.get(), communicator->stringToIdentity("server"));
+        adapter->add(server.get(), Ice::stringToIdentity("server"));
     log->info("Activate adpater");
     adapter->activate();
     log->info("Wait for shutdown");

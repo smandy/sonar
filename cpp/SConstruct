@@ -1,25 +1,39 @@
 import builders
+
+print( builders.__file__)
+
 from os.path import expanduser as eu
 
 spdlog = '-I%s' % eu('~/repos/spdlog/include')
 
-env = Environment(CPPFLAGS = ['--std=c++14', '-I.', '-g', spdlog],
-                  SLICE_INCLUDES= ['/usr/share/Ice-3.6.1/slice'],
+env = Environment(CPPFLAGS = ['--std=c++23', '-I.', '-g', spdlog],
+                  SLICE_INCLUDES= ['/usr/share/ice/slice'],
                   LIBPATH = ['/usr/lib/x86_64-linux-gnu/c++11',
                              '/usr/lib/x86_64-linux-gnu'])
 
+
+
 builders.addSlice2cppBuilder(env)
 
-env.Slice2cpp(target = ['sonar.cpp', 'sonar.hpp'], source = '../slice/sonar.ice')
+env.Slice2cpp(target = ['sonar'], source = '../slice/sonar.ice')
+
+#print("xs are %s" % xs)
+
 sonar = env.Object(source = 'sonar.cpp')
 
 ruleLoader = env.Object('ruleLoader.cpp')
 timeUtils = env.Object('timeUtils.cpp')
 uptimeRequirement = env.Object('uptimeRequirement.cpp')
-lastNewsRequirement = env.Object('lastNewsRequirement.cpp')
+lastNewsRequirement = env.Object('lastNewsRequirement.cpp', depends = ['sonar.h'])
 
-env.Program('sonarServer.cpp', LIBS = [sonar, 'Ice', 'IceUtil','IceStorm','pthread', uptimeRequirement, lastNewsRequirement,ruleLoader, timeUtils, 'boost_filesystem', 'boost_system', ])
+print("lastNewsRequirement is a %s" % type(lastNewsRequirement))
 
-env.Program('chronoStuff.cpp', LIBS = ['boost_date_time', 'boost_filesystem', 'boost_system'] )
+#for x in lastNewsRequirement:
+#    x.fs.depends_on(['sonar.h'])
 
-env.Program('ruleLoaderMain.cpp' , LIBS = [ruleLoader, timeUtils, uptimeRequirement, lastNewsRequirement, 'boost_filesystem', 'boost_system' ])
+env.Program('sonarServer.cpp', LIBS = [sonar, 'Ice', 'IceStorm','pthread', uptimeRequirement, lastNewsRequirement,ruleLoader, timeUtils, 'boost_filesystem', 'boost_system', 'fmt'])
+
+env.Program('chronoStuff', ['chronoStuff.cpp'], LIBS = ['boost_date_time', 'boost_filesystem', 'boost_system'] )
+
+env.Program('ruleLoaderMain.cpp' , LIBS = [ruleLoader, timeUtils, uptimeRequirement, lastNewsRequirement, 'boost_filesystem', 'boost_system', 'Ice' ])
+
