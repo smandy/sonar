@@ -6,11 +6,8 @@ from os.path import expanduser as eu
 
 spdlog = '-I%s' % eu('~/repos/spdlog/include')
 
-env = Environment(CPPFLAGS = ['--std=c++23', '-I.', '-g', spdlog],
-                  SLICE_INCLUDES= ['/usr/share/ice/slice'],
-                  LIBPATH = ['/usr/lib/x86_64-linux-gnu/c++11',
-                             '/usr/lib/x86_64-linux-gnu'])
-
+env = Environment(CPPFLAGS = ['--std=c++23', '-I.', '-g'],
+                  SLICE_INCLUDES= ['/usr/share/ice/slice'] )
 
 
 builders.addSlice2cppBuilder(env)
@@ -21,17 +18,17 @@ env.Slice2cpp(target = ['sonar'], source = '../slice/sonar.ice')
 
 sonar = env.Object(source = 'sonar.cpp')
 
-ruleLoader = env.Object('ruleLoader.cpp')
-timeUtils = env.Object('timeUtils.cpp')
-uptimeRequirement = env.Object('uptimeRequirement.cpp')
-lastNewsRequirement = env.Object('lastNewsRequirement.cpp', depends = ['sonar.h'])
+ruleLoader = env.Object('ruleLoader.cpp', depends = ['sonar.h','sonar.cpp'])
+timeUtils = env.Object('timeUtils.cpp', depends = ['sonar.h','sonar.cpp'])
+uptimeRequirement = env.Object('uptimeRequirement.cpp', depends = ['sonar.h','sonar.cpp'])
+lastNewsRequirement = env.Object('lastNewsRequirement.cpp', depends = ['sonar.h', 'sonar.cpp'])
 
 print("lastNewsRequirement is a %s" % type(lastNewsRequirement))
 
 #for x in lastNewsRequirement:
 #    x.fs.depends_on(['sonar.h'])
 
-env.Program('sonarServer.cpp', LIBS = [sonar, 'Ice', 'IceStorm','pthread', uptimeRequirement, lastNewsRequirement,ruleLoader, timeUtils, 'boost_filesystem', 'boost_system', 'fmt'])
+env.Program('sonarServer.cpp', LIBS = [sonar, 'Ice', 'IceStorm','pthread', uptimeRequirement, lastNewsRequirement,ruleLoader, timeUtils, 'boost_filesystem', 'boost_system', 'fmt'], depends = ['sonar.h','sonar.cpp'])
 
 env.Program('chronoStuff', ['chronoStuff.cpp'], LIBS = ['boost_date_time', 'boost_filesystem', 'boost_system'] )
 

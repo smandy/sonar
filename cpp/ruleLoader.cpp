@@ -1,19 +1,20 @@
 #include "ruleLoader.h"
 
-std::vector<RulePtr> RuleLoader::parseRules(const std::string &fn) {
+std::vector<RulePtr> RuleLoader::parseRules(const std::string& fn)
+{
     bfs::path p(fn);
-    
-    if ( ! bfs::is_regular_file(p) ) {
+
+    if (!bfs::is_regular_file(p)) {
         std::ostringstream oss;
         oss << "Bad filename : " << fn;
-        throw std::invalid_argument( oss.str() );
+        throw std::invalid_argument(oss.str());
     };
-    
+
     std::vector<RulePtr> ret{};
     std::ifstream is(fn);
     std::array<char, 128> buf;
     while (is.getline(&buf[0], buf.size())) {
-        std::vector<std::string> tokens { "Tokens=" };
+        std::vector<std::string> tokens{"Tokens="};
         std::string s(&buf[0]);
         boost::split(tokens, s, boost::is_any_of(" "), boost::token_compress_on);
         if (s[0] == '#') {
